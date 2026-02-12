@@ -8,9 +8,10 @@ import StartScreen from './components/StartScreen'
 import QuestionScreen from './components/QuestionScreen'
 import AnalyzingScreen from './components/AnalyzingScreen'
 import ResultScreen from './components/ResultScreen'
+import HowItWorksScreen from './components/HowItWorksScreen'
 
 // 画面の状態
-type Screen = 'start' | 'questions' | 'analyzing' | 'result'
+type Screen = 'start' | 'questions' | 'analyzing' | 'result' | 'howItWorks'
 
 function App() {
   const [screen, setScreen] = useState<Screen>('start')
@@ -74,11 +75,24 @@ function App() {
     setScreen('start')
   }
 
+  // 診断の仕組みページへ
+  const handleShowHowItWorks = () => {
+    setScreen('howItWorks')
+  }
+
+  // 診断の仕組みから戻る
+  const handleHowItWorksBack = () => {
+    setScreen('start')
+  }
+
   return (
     <div className="w-full max-w-lg mx-auto">
       <AnimatePresence mode="wait">
         {screen === 'start' && (
-          <StartScreen key="start" onStart={handleStart} />
+          <StartScreen key="start" onStart={handleStart} onShowHowItWorks={handleShowHowItWorks} />
+        )}
+        {screen === 'howItWorks' && (
+          <HowItWorksScreen key="howItWorks" onBack={handleHowItWorksBack} onStartDiagnosis={() => setScreen('start')} />
         )}
         {screen === 'questions' && (
           <QuestionScreen key="questions" onComplete={handleQuestionsComplete} onBack={handleBackToStart} />

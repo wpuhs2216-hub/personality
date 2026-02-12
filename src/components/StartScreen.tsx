@@ -1,12 +1,21 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Brain, ArrowRight } from 'lucide-react'
+import { Brain, ArrowRight, HelpCircle } from 'lucide-react'
 
 interface Props {
   onStart: (name: string) => void
+  onShowHowItWorks: () => void
 }
 
-export default function StartScreen({ onStart }: Props) {
+// 4軸のバッジデータ
+const axisBadges = [
+  { letters: 'G/B', label: '群れ度' },
+  { letters: 'M/R', label: '現実逃避度' },
+  { letters: 'C/W', label: '薄情度' },
+  { letters: 'K/T', label: '仕切り度' },
+]
+
+export default function StartScreen({ onStart, onShowHowItWorks }: Props) {
   const [name, setName] = useState('')
 
   // localStorageから名前を復元
@@ -50,6 +59,25 @@ export default function StartScreen({ onStart }: Props) {
         10の質問であなたの性格タイプを診断します
       </p>
 
+      {/* 軽い仕組み解説 */}
+      <div className="w-full max-w-xs mb-6">
+        <p className="text-xs text-center mb-2" style={{ color: 'var(--color-text-muted)' }}>
+          4つの軸 × 2パターン = 16タイプ
+        </p>
+        <div className="flex justify-center gap-2 flex-wrap">
+          {axisBadges.map((badge) => (
+            <span
+              key={badge.letters}
+              className="text-xs px-2 py-1 rounded-full"
+              style={{ background: 'var(--color-surface)', color: 'var(--color-text-muted)' }}
+            >
+              <span className="font-bold" style={{ color: 'var(--color-primary)' }}>{badge.letters}</span>
+              {' '}{badge.label}
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* 名前入力 */}
       <div className="w-full max-w-xs mb-6">
         <label htmlFor="name-input" className="block text-sm mb-2" style={{ color: 'var(--color-text-muted)' }}>
@@ -91,8 +119,18 @@ export default function StartScreen({ onStart }: Props) {
         <ArrowRight className="w-5 h-5" />
       </motion.button>
 
+      {/* 診断の仕組みボタン */}
+      <button
+        onClick={onShowHowItWorks}
+        className="flex items-center gap-1 mt-6 text-sm cursor-pointer transition-opacity hover:opacity-80"
+        style={{ color: 'var(--color-text-muted)', background: 'none', border: 'none' }}
+      >
+        <HelpCircle className="w-4 h-4" />
+        診断の仕組み
+      </button>
+
       {/* フッター */}
-      <p className="mt-12 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+      <p className="mt-8 text-xs" style={{ color: 'var(--color-text-muted)' }}>
         えぐしゅぎラボ
       </p>
     </motion.div>
